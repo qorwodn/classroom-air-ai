@@ -201,11 +201,13 @@ if data is None:
 # =========================
 else:
     current = data["current"]
-    predicted = data["predicted"]
+    predicted = data["predicted_10min"]
     outdoor = data["outdoor"]
-    scores = data["scores"]
-    action = data["action"]
-    reasons = data["reasons"]
+
+    recommendation = data["recommendation"]
+    scores = recommendation["scores"]
+    action = recommendation["action"]
+    reasons = recommendation["reasons"]
 
     st.caption(f"마지막 AI 분석 시각: {data['timestamp']}")
 
@@ -224,25 +226,25 @@ else:
 
         a.metric(
             "CO₂",
-            f"{current['Indoor_CO2_ppm']:.0f} ppm",
+            f"{current['co2']:.0f} ppm",
         )
         b.metric(
             "PM2.5",
-            f"{current['Indoor_PM2_5_ugm3']:.1f} µg/m³",
+            f"{current['pm25']:.1f} µg/m³",
         )
 
         a.metric(
             "PM10",
-            f"{current['Indoor_PM10_ugm3']:.1f} µg/m³",
+            f"{current['pm10']:.1f} µg/m³",
         )
         b.metric(
             "온도",
-            f"{current['Indoor_Temperature_C']:.1f} ℃",
+            f"{current['temperature']:.1f} ℃",
         )
 
         a.metric(
             "습도",
-            f"{current['Indoor_RH_percent']:.1f} %",
+            f"{current['humidity']:.1f} %",
         )
 
     with right:
@@ -254,34 +256,34 @@ else:
         a, b = st.columns(2)
 
         co2_delta = (
-            predicted["Indoor_CO2_ppm"]
-            - current["Indoor_CO2_ppm"]
+            predicted["co2"]
+            - current["co2"]
         )
 
         a.metric(
             "CO₂",
-            f"{predicted['Indoor_CO2_ppm']:.0f} ppm",
+            f"{predicted['co2']:.0f} ppm",
             f"{co2_delta:+.0f} ppm",
         )
 
         b.metric(
             "PM2.5",
-            f"{predicted['Indoor_PM2_5_ugm3']:.1f} µg/m³",
+            f"{predicted['pm2_5']:.1f} µg/m³",
         )
 
         a.metric(
             "PM10",
-            f"{predicted['Indoor_PM10_ugm3']:.1f} µg/m³",
+            f"{predicted['pm10']:.1f} µg/m³",
         )
 
         b.metric(
             "온도",
-            f"{predicted['Indoor_Temperature_C']:.1f} ℃",
+            f"{predicted['temperature']:.1f} ℃",
         )
 
         a.metric(
             "습도",
-            f"{predicted['Indoor_RH_percent']:.1f} %",
+            f"{predicted['humidity']:.1f} %",
         )
 
     st.divider()
@@ -298,22 +300,22 @@ else:
 
     o1.metric(
         "실외 PM2.5",
-        f"{outdoor['Outdoor_PM2_5_ugm3']:.1f} µg/m³",
+        f"{outdoor['pm2_5']:.1f} µg/m³",
     )
 
     o2.metric(
         "실외 PM10",
-        f"{outdoor['Outdoor_PM10_ugm3']:.1f} µg/m³",
+        f"{outdoor['pm10']:.1f} µg/m³",
     )
 
     o3.metric(
         "실외 온도",
-        f"{outdoor['Outdoor_Temperature_C']:.1f} ℃",
+        f"{outdoor['temperature']:.1f} ℃",
     )
 
     o4.metric(
         "실외 습도",
-        f"{outdoor['Outdoor_RH_percent']:.1f} %",
+        f"{outdoor['humidity']:.1f} %",
     )
 
     st.divider()
