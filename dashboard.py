@@ -230,7 +230,7 @@ else:
         )
         b.metric(
             "PM2.5",
-            f"{current['pm25']:.1f} µg/m³",
+            f"{current['pm2_5']:.1f} µg/m³",
         )
 
         a.metric(
