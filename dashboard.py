@@ -1,6 +1,7 @@
 import json
 import time
 from pathlib import Path
+import requests
 
 import pandas as pd
 import streamlit as st
@@ -110,15 +111,34 @@ st.markdown(
 # 데이터 읽기
 # =========================
 def load_prediction():
-    if not PREDICTION_FILE.exists():
-        return None
-
     try:
-        with open(PREDICTION_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except Exception:
-        return None
+        supabase_url = st.secrets["SUPABASE_URL"]
+        supabase_key = st.secrets["SUPABASE_KEY"]
 
+        url = (
+            supabase_url.rstrip("/")
+            + "/rest/v1/live_prediction"
+            + "?select=data,created_at&order=created_at.desc&limit=1"
+        )
+
+        headers = {
+            "apikey": supabase_key,
+            "Authorization": f"Bearer {supabase_key}",
+        }
+
+        response = requests.get(url, headers=headers, timeout=10)
+        response.raise_for_status()
+
+        rows = response.json()
+
+        if not rows:
+            return None
+
+        return rows[0]["data"]
+
+    except Exception as e:
+        st.warning(f"Supabase 데이터 불러오기 실패: {e}")
+        return None
 
 def load_history():
     if not HISTORY_FILE.exists():
