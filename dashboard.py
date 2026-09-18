@@ -296,28 +296,32 @@ else:
         unsafe_allow_html=True,
     )
 
-    o1, o2, o3, o4 = st.columns(4)
+    o1, o2, o3, o4, o5 = st.columns(5)
 
     o1.metric(
+        "실외 CO₂",
+        f"{outdoor['co2']:.0f} ppm",
+    )
+
+    o2.metric(
         "실외 PM2.5",
         f"{outdoor['pm2_5']:.1f} µg/m³",
     )
 
-    o2.metric(
-        "실외 PM10",
+    o3.metric(
+        "실외 PM10", 
         f"{outdoor['pm10']:.1f} µg/m³",
     )
 
-    o3.metric(
+    o4.metric(
         "실외 온도",
         f"{outdoor['temperature']:.1f} ℃",
     )
 
-    o4.metric(
+    o5.metric(
         "실외 습도",
         f"{outdoor['humidity']:.1f} %",
     )
-
     st.divider()
 
     # -------------------------
